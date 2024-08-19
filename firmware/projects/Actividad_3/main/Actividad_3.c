@@ -69,7 +69,7 @@ void ControlLeds(struct leds* puntero_led)
 				LedToggle(puntero_led->n_led);
 
 				size_t j;
-				for (j = 0; j < puntero_led->periodo ; j++)
+				for (j = 0; j < puntero_led->periodo/CONFIG_BLINK_PERIOD ; j++)
 				{	
 					vTaskDelay(CONFIG_BLINK_PERIOD / portTICK_PERIOD_MS);
 				}
@@ -85,7 +85,7 @@ void app_main(void){
 	my_leds.mode = TOGGLE;
 	my_leds.n_led = LED_3;
 	my_leds.n_ciclos = 10;
-	my_leds.periodo = 5;
+	my_leds.periodo = 500;
 
 	ControlLeds(&my_leds);
 
