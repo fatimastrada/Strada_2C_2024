@@ -1,8 +1,11 @@
-/*! @mainpage Template
+/*! @mainpage Proyecto 1 ejercicio 6
  *
  * @section genDesc General Description
  *
- * This section describes how the program works.
+ * Función que recibe un dato de 32 bits, la cantidad de dígitos de salida y dos vectores de estructuras del tipo  
+ * gpioConf_t. La función deberá mostrar por display el valor que recibe. El programa está diseñado para mostrar un número 
+ * en una pantalla LCD de 7 segmentos convirtiendo el número al formato BCD (decimal codificado en binario) y luego 
+ * activando los pines GPIO correspondientes en un ESP32.
  *
  * <a href="https://drive.google.com/...">Operation Example</a>
  *
@@ -17,34 +20,102 @@
  *
  * |   Date	    | Description                                    |
  * |:----------:|:-----------------------------------------------|
- * | 12/09/2023 | Document creation		                         |
+ * | 16/08/2024 | Document creation		                         |
  *
- * @author Albano Peñalva (albano.penalva@uner.edu.ar)
+ * @author Fátima Anabel Strada (fatima.strada@ingenieria.uner.edu.ar)
  *
  */
 
 /*==================[inclusions]=============================================*/
+
 #include <stdio.h>
 #include <stdint.h>
 #include <gpio_mcu.h>
 
-#define N_BITS 4
-#define LCD_DIGITS 3  // Número de dígitos del LCD (ajusta si es necesario)
 /*==================[macros and definitions]=================================*/
+/**
+ * @brief Número de bits utilizados para representar cada dígito en formato BCD.
+ */
+#define N_BITS 4
+
+/**
+ * @brief Número de dígitos en la pantalla LCD.
+ */
+#define LCD_DIGITS 3  
 
 /*==================[internal data definition]===============================*/
+
+/**
+ * @brief struct para configurar los pines GPIO.
+ */
+
 typedef struct {
     gpio_t pin;
     io_t dir;
 } gpioConfig_t;
+
 /*==================[internal functions declaration]=========================*/
+/**
+ * @fn int8_t convertToBcdArray(uint32_t data, uint8_t digits, uint8_t *bcd_number)
+ * @brief Converts a number to its BCD representation.
+ * 
+ * @param data The number to be converted.
+ * @param digits Number of digits to represent.
+ * @param bcd_number Array to store the BCD digits.
+ * @return 
+ */
 int8_t convertToBcdArray(uint32_t data, uint8_t digits, uint8_t *bcd_number);
+
+/**
+ * @fn void BCDtoGPIO(uint8_t digit, gpioConfig_t *gpio_config)
+ * @brief Sets the GPIO pins according to the BCD representation of a digit.
+ * 
+ * @param digit The BCD digit to be displayed.
+ * @param gpio_config Array of GPIO configurations.
+ * @return
+ */
 void BCDtoGPIO(uint8_t digit, gpioConfig_t *gpio_config);
+
+/**
+ * @fn void GPIOInit(gpio_t pin, io_t dir)
+ * @brief Initializes a GPIO pin.
+ * 
+ * @param pin GPIO pin to initialize.
+ * @param dir Direction of the GPIO pin.
+ * @return
+ */
 void GPIOInit(gpio_t pin, io_t dir);
+
+/**
+ * @fn void GPIOOn(gpio_t pin)
+ * @brief Turns on a GPIO pin.
+ * 
+ * @param pin GPIO pin to turn on.
+ * @return
+ */
 void GPIOOn(gpio_t pin);
+
+/**
+ * @fn void GPIOOff(gpio_t pin)
+ * @brief Turns off a GPIO pin.
+ * 
+ * @param pin GPIO pin to turn off.
+ * @return
+ */
 void GPIOOff(gpio_t pin);
+
+/**
+ * @fn  void GPIOstate(gpio_t pin, uint8_t state)
+ * @brief Sets the state of a GPIO pin.
+ * 
+ * @param pin GPIO pin to set the state.
+ * @param state State to set (1 for on, 0 for off).
+ * @return
+ */
 void GPIOstate(gpio_t pin, uint8_t state);
+
 /*==================[external functions definition]==========================*/
+
 int8_t convertToBcdArray(uint32_t data, uint8_t digits, uint8_t *bcd_number) {
     // Verificamos si el número de dígitos proporcionado es suficiente
     uint32_t max_value = 1;
