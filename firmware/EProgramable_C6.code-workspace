@@ -1,9 +1,6 @@
 {
     "folders": [
         {
-            "path": "./drivers"
-        },
-        {
             "path": "./projects/0_blinking"
         },
         {
@@ -17,6 +14,27 @@
         },
         {
             "path": "./projects/x_template"
+        },
+        {
+            "path": "projects/Actividad_2"
+        },
+        {
+            "path": "projects/Actividad_3"
+        },
+        {
+            "path": "projects/Actividad_1"
+        },
+        {
+            "path": "projects"
+        },
+        {
+            "path": "projects/Actividad_4"
+        },
+        {
+            "path": "projects/Actividad_5"
+        },
+        {
+            "path": "projects/Actividad_6"
         }
     ],
     "settings": {
@@ -71,7 +89,8 @@
             "ili9341.h": "c",
             "soc_caps.h": "c",
             "mpu6050.h": "c",
-            "i2c_mcu.h": "c"
+            "i2c_mcu.h": "c",
+            "stdio.h": "c"
         },
     },
     "tasks": {
