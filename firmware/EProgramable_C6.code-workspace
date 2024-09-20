@@ -38,6 +38,12 @@
         },
         {
             "path": "projects/x_template"
+        },
+        {
+            "path": "projects/proyecto2_act2"
+        },
+        {
+            "path": "projects/proyecto2_act3"
         }
     ],
     "settings": {
