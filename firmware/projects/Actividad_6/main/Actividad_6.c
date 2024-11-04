@@ -153,7 +153,7 @@ void BCDtoGPIO(uint8_t digit, gpioConfig_t *gpio_config) {
 }
 // Función para mostrar un número en el display LCD
 void displayNumberOnLCD(uint32_t data, gpioConfig_t *data_gpio_config, gpioConfig_t *digit_gpio_config) {
-    uint8_t bcd_array[LCD_DIGITS];
+    uint8_t bcd_array[LCD_DIGITS]; // arreglo de tamaño LCD_DIGITS para almacenar los dígitos en formato BCD convertidos a partir del número data.
     
     // Convertir el número a formato BCD
     if (convertToBcdArray(data, LCD_DIGITS, bcd_array) != 0) {
@@ -185,6 +185,7 @@ void displayNumberOnLCD(uint32_t data, gpioConfig_t *data_gpio_config, gpioConfi
 
 void app_main(void) {
     // Configuración de pines de datos y dígitos
+    // 0 suele indicar entrada (IN). 1 suele indicar salida (OUT).
     gpioConfig_t data_gpio_config[N_BITS] = {
         {GPIO_20, 1},
         {GPIO_21, 1},

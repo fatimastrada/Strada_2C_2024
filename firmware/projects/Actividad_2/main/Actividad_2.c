@@ -23,7 +23,7 @@
 #include "led.h"
 #include "switch.h"
 /*==================[macros and definitions]=================================*/
-#define CONFIG_BLINK_PERIOD 500
+#define CONFIG_BLINK_PERIOD 500 // 500 ms.
 /*==================[internal data definition]===============================*/
 
 /*==================[internal functions declaration]=========================*/
@@ -47,6 +47,6 @@ void app_main(void){
     		break;
     	}
 	    //LedToggle(LED_3);
-		vTaskDelay(CONFIG_BLINK_PERIOD / portTICK_PERIOD_MS);
+		vTaskDelay(CONFIG_BLINK_PERIOD / portTICK_PERIOD_MS); // Retardo que define el período de titilación de los LEDs.
 	}
 }

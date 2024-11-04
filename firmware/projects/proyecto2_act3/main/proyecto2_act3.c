@@ -138,7 +138,7 @@ void FuncTimerA(void* param){
 
 void RecibirData(void* param){
 
-	UartReadByte(UART_PC, &data);
+	UartReadByte(UART_PC, &data); // para leer un byte de datos de un puerto UART. La variable data es donde se almacenará el byte recibido.
 	switch (data)
 	{
 	case 'O':
@@ -154,13 +154,13 @@ static void EnviarDistancia(void *pvParameter){
 
 	while (true)
 	{	
-		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // función de FreeRTOS que suspende la tarea hasta que recibe una notificación 
 
-		if(on == 1)
+		if(on == 1) // si hay un modo activado para enviar la distancia
 		{
-		uint8_t* msg = UartItoa(distancia, BASE);
-		UartSendString(UART_PC,(const char*) msg);
-		UartSendString(UART_PC, " cm\r\n");	
+		uint8_t* msg = UartItoa(distancia, BASE); // UartItoa convierte el valor de distancia a su representación ASCII.
+		UartSendString(UART_PC,(const char*) msg); // se envía a través de UART 
+		UartSendString(UART_PC, " cm\r\n");	// se envía la cadena " cm\r\n", que incluye las unidades (centímetros) y una nueva línea. 
 		}
 	}
 }
@@ -241,9 +241,9 @@ void app_main(void) {
         .param_p = NULL
     };
 
-	serial_config_t serial_port = {
+	serial_config_t serial_port = { //  inicialización de un puerto UART
 		.port = UART_PC,
-		.baud_rate = 115200,
+		.baud_rate = 115200, // velocidad de transmisión de datos.
 		.func_p = &RecibirData,
 		.param_p = NULL
 	};

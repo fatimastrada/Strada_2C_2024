@@ -90,16 +90,17 @@ static void OperarConDistancia(void *pvParameter);
  * @param[in] param
  * @return 
  */
-void FuncTimerA(void* param);
+void FuncTimerA(void* param); // se utiliza para notificar a una tarea desde una rutina de servicio de interrupción (ISR). 
 /*==================[external functions definition]==========================*/
 
 void FuncTimerA(void* param){
 	// vTaskNotifyGiveFromISR: para enviar notificaciones desde una interrupción.
     vTaskNotifyGiveFromISR(operar_distancia_task_handle, pdFALSE);
+	// operar_distancia_task_handle es el identificador de la tarea que se está notificando.
 }
 
 static void OperarConDistancia(void *pvParameter){
-    while(true){
+    while(true){ // para que la función siga ejecutándose continuamente sin salir.
 		// La tarea esta en espera (bloqueada) hasta que reciba una notificación mediante ulTaskNotifyTake
 		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);  
 		
@@ -170,7 +171,7 @@ void app_main(void) {
 	SwitchesInit();
 	// timer_config_t: configura el temporizador definiendo su periodo y la función que se llamará cuando el temporizador 
 	//se dispare.
-	timer_config_t timer_sensor = {
+	timer_config_t timer_sensor = { // estructura que contiene la configuración del temporizador.
         .timer = TIMER_A,
         .period = CONFIG_SENSOR_TIMERA,
         .func_p = FuncTimerA,

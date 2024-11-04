@@ -35,7 +35,7 @@
 #define OFF 0
 #define ON 1
 #define TOGGLE 2
-#define CONFIG_BLINK_PERIOD 100
+#define CONFIG_BLINK_PERIOD 100 // 100 ms
 /*==================[internal data definition]===============================*/
 
 struct leds
@@ -48,7 +48,8 @@ struct leds
 
 /*==================[internal functions declaration]=========================*/
 
-void ControlLeds(struct leds* puntero_led);
+void ControlLeds(struct leds* puntero_led); // Recibe un puntero a una estructura leds y controla el LED 
+// de acuerdo con los valores en la estructura.
 
 /*==================[external functions definition]==========================*/
 void ControlLeds(struct leds* puntero_led)
@@ -62,7 +63,8 @@ void ControlLeds(struct leds* puntero_led)
 		case OFF:
 			LedOff(puntero_led->n_led);
 		break;
-
+// modo TOGGLE: realiza un bucle de n_ciclos en el que alterna el estado del LED con LedToggle(), esperando un periodo 
+// dividido en pasos de CONFIG_BLINK_PERIOD (100 ms) entre cada cambio de estado.
 		case TOGGLE:
 			for (size_t i = 0; i < puntero_led->n_ciclos; i++)
 			{
@@ -71,7 +73,7 @@ void ControlLeds(struct leds* puntero_led)
 				size_t j;
 				for (j = 0; j < puntero_led->periodo/CONFIG_BLINK_PERIOD ; j++)
 				{	
-					vTaskDelay(CONFIG_BLINK_PERIOD / portTICK_PERIOD_MS);
+					vTaskDelay(CONFIG_BLINK_PERIOD / portTICK_PERIOD_MS); // Retardo que define el período de titilación de los LEDs.
 				}
 					
 			}
@@ -81,7 +83,8 @@ void ControlLeds(struct leds* puntero_led)
 
 void app_main(void){
 	LedsInit();
-
+// Asigna valores a la estructura my_leds, configurando el modo TOGGLE para el LED 3, con 10 ciclos y un período 
+// de 500 ms.
 	my_leds.mode = TOGGLE;
 	my_leds.n_led = LED_3;
 	my_leds.n_ciclos = 10;

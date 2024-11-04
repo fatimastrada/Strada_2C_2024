@@ -11,7 +11,7 @@
  * 
  * El sesto utiliza un sensor ultrasonido para detectar la proximidad del operario,
  * un servo para abrir y cerrar la tapa, una balanza para medir la capacidad, leds indicadores,
- * un motor de corriente continua para presionar el aerosol.
+ * un motor de corriente continua para presionar el aerosol
  *
  * @section hardConn Hardware Connection
  *

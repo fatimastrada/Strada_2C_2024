@@ -112,22 +112,15 @@ void FuncTimerB(void *param);
 */
 static void ADC_Conversion(void *pvParameter);
 
-/** 
-* @brief lee valores digitales y los convierte en analógicos
-* @param[in] pvParameter puntero tipo void 
-*/
-static void DAC_Conversion(void *pvParameter);
-
 /*==================[internal functions declaration]=========================*/
 void FuncTimerA(void* param){
 
-	vTaskNotifyGiveFromISR(adc_conversion_task_handle, pdFALSE);
+	vTaskNotifyGiveFromISR(adc_conversion_task_handle, pdFALSE); // Esta función notifica a la tarea ADC_Conversion cuando debe realizar una lectura del ADC
 }
 
 void FuncTimerB(void* param){
 
-	vTaskNotifyGiveFromISR(dac_conversion_task_handle, pdFALSE);
-	AnalogOutputWrite(ecg[contador]);
+	AnalogOutputWrite(ecg[contador]); // AnalogOutputWrite: convierte el valor digital en un valor analógico 
 		contador++;
 		if(contador > 230)
 		{
@@ -138,24 +131,18 @@ void FuncTimerB(void* param){
 static void ADC_Conversion(void *pvParameter){
 
 	while(true){
-		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-		AnalogInputReadSingle(CH1, &value);
-		uint8_t *msg = UartItoa(value, BASE);
+		ulTaskNotifyTake(pdTRUE, portMAX_DELAY); // espera una notificacion
+		AnalogInputReadSingle(CH1, &value); //  lee un valor del canal analógico (en este caso, CH1) y almacena el resultado en la variable value.
+		uint8_t *msg = UartItoa(value, BASE); // convierte a ASCII
 		UartSendString(UART_PC,">data:");
 		UartSendString(UART_PC, (char*)msg);
 		UartSendString(UART_PC,",DA:");
-		UartSendString(UART_PC, (char*)UartItoa(ecg[contador], BASE));
+		UartSendString(UART_PC, (char*)UartItoa(ecg[contador], BASE)); // convierte el valor en el arreglo ecg (utilizando el índice contador) a ASCII y lo envía.
 		UartSendString(UART_PC, "\r\n");
 	}
 }
 
-static void DAC_Conversion(void *pvParameter){
 
-	while(true){
-		printf("Tarea DA");
-		ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-	}
-}
 /*==================[external functions definition]==========================*/
 void app_main(void){
 
@@ -194,7 +181,6 @@ void app_main(void){
 	AnalogOutputInit();
 	
 	xTaskCreate(&ADC_Conversion, "ConversionADC", 2048, NULL, 5, &adc_conversion_task_handle);
-	xTaskCreate(&DAC_Conversion, "ConversionDAC", 2048, NULL, 5, &dac_conversion_task_handle);
 
 	TimerStart(timer_sensor.timer);
 	TimerStart(timer_sensor2.timer);

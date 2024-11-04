@@ -44,13 +44,13 @@
  * @def CONFIG_DELAY
  * @brief Tiempo de refresco de medición de distancia y actualización de LEDs y pantalla LCD en milisegundos.
  */
-#define CONFIG_DELAY 1000
+#define CONFIG_DELAY 1000 // 1 s
 
 /**
  * @def CONFIG_DELAY_SWITCHES
  * @brief Tiempo de delay para el control de lectura de los switches en milisegundos.
  */
-#define CONFIG_DELAY_SWITCHES 100
+#define CONFIG_DELAY_SWITCHES 100 // 0.1 s
 
 /**
  * @brief Distancia medida por el sensor HC-SR04 en centímetros.
@@ -119,7 +119,7 @@ static void OperarConDistancia(void *pvParameter){
 		if(on == 1)
 		{
 			// Medir distancia
-			distancia = HcSr04ReadDistanceInCentimeters();
+			distancia = HcSr04ReadDistanceInCentimeters(); // para medir la distancia a un objeto usando el sensor y devolver esa distancia en centímetros. 
 
 			// Manejar LEDs según la distancia
 			if(distancia < 10){
@@ -145,7 +145,7 @@ static void OperarConDistancia(void *pvParameter){
 
 			// Mostrar distancia en la pantalla LCD si no está en hold
 			if(hold == 0){
-				LcdItsE0803Write(distancia);
+				LcdItsE0803Write(distancia); // para enviar datos o comandos al display LCD ITSE0803
 			}
 		}
 		else
@@ -162,18 +162,18 @@ static void OperarConDistancia(void *pvParameter){
 
 static void OperarConTeclado(void *pvParameter){
     while(true){
-		uint8_t switches = SwitchesRead();
+		uint8_t switches = SwitchesRead(); // lee continuamente el estado de las teclas mediante SwitchesRead().
 		switch(switches)
 		{
 			case SWITCH_1:
-				on = !on;
+				on = !on; // la variable on alterna su valor (activa/desactiva la medición).
 			break;
 			
 			case SWITCH_2:
-				hold = !hold;
+				hold = !hold; // la variable hold alterna su valor (mantiene o libera el resultado).
 			break;
 
-			case SWITCH_1 | SWITCH_2:
+			case SWITCH_1 | SWITCH_2: // ambas variables on y hold alternan sus valores.
 				on =! on;
 				hold =! hold;
 			break;
@@ -188,8 +188,8 @@ static void OperarConTeclado(void *pvParameter){
  */
 void app_main(void){
 	LedsInit();
-	HcSr04Init(3, 2);
-	LcdItsE0803Init();
+	HcSr04Init(3, 2); // Inicializa el sensor configurando los pines 3 y 2 como los pines de disparo (trigger) y eco (echo) respectivamente.
+	LcdItsE0803Init(); // inicializa el display
 	SwitchesInit();
 
 	xTaskCreate(&OperarConDistancia, "OperarConDistancia", 512, NULL, 5, &operar_distancia_task_handle);
