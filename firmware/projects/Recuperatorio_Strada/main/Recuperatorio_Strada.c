@@ -2,7 +2,7 @@
  *
  * @section genDesc General Description
  *
- * This section describes how the program works.
+ * Sistema de pesaje de camiones basado en la placa ESP-EDU.
  *
  * <a href="https://drive.google.com/...">Operation Example</a>
  *
@@ -40,18 +40,56 @@
 /*==================[macros and definitions]=================================*/
 // El sistema debe realizar mediciones de distancia a razón de 10 muestras por segundo, esto es 10 veces en un segundo.
 // P = 1/F = 1/10 = 0.1 s = 100 ms.
+/**
+ * @def CONFIG_DELAY
+ * @brief Tiempo de refresco de medición de distancia y actualización de LEDs en milisegundos.
+ */
 #define CONFIG_DELAY 100 
 // 200 muestras en un segundo -> P = 1 / 200 = 0.005 s = 5 ms
+/**
+ * @def CONFIG_DELAY_BALANZA
+ * @brief Tiempo de refresco de medición de peso.
+ */
 #define CONFIG_DELAY_BALANZA 5
+/**
+ * @def GPIO_Barrera
+ * @brief GPIO al que se le conecta la barrera.
+ */
 #define GPIO_Barrera GPIO_11
 
-
+/**
+ * @var distancia
+ * @brief Distancia medida por el sensor HC-SR04 en centímetros.
+*/
 uint16_t distancia;
+/**
+ * @var velocidad
+ * @brief Variable que almacena la distancia calculada a través de la distancia y del tiempo.
+*/
 uint16_t velocidad;
+/**
+ * @var peso1
+ * @brief Variable que almacena el peso medido por la galga 1
+*/
 uint16_t peso1;
+/**
+ * @var peso2
+ * @brief Variable que almacena el peso medido por la galga 2
+*/
 uint16_t peso2;
+/**
+ * @var peso_total
+ * @brief Variable que almacena el peso total, resultado de la suma de peso1 y peso2
+*/
 uint16_t peso_total;
+/**
+ * @var data
+ * @brief Almacena los datos que se reciben por la UART
+*/
 uint8_t data;
+/**
+ * @brief Booleano que indica si se realiza la medición (activo/inactivo).
+ */
 bool on = 0;
 
 /*==================[internal data definition]===============================*/
@@ -60,9 +98,20 @@ TaskHandle_t operar_distancia_task_handle = NULL;
 TaskHandle_t operar_peso_task_handle = NULL;
 
 /*==================[internal functions declaration]=========================*/
-
+/** 
+* @brief Encargada de medir la distancia y a traves de la misma la velcoidad para luego controlar los LEDs según la velocidad calculada
+* @param[in] pvParameter puntero tipo void 
+*/
 static void OperarConDistancia(void *pvParameter);
+/** 
+* @brief Realiza la medición del peso del vehículo cuando el mismo se encuentra detenido.
+* @param[in] pvParameter puntero tipo void 
+*/
 static void OperarConPeso(void *pvParameter);
+ /**
+ * @brief Lee datos recibidos por la UART (a través del puerto UART_PC). 
+ * @param[in] param puntero tipo void 
+ */
 void RecibirData(void* param);
 
 /*==================[external functions definition]==========================*/
