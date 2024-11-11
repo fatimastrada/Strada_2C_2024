@@ -1,0 +1,20 @@
+1. ¿Qué tipo de conversor es el presentado en la figura?
+	a. Describa brevemente. 
+	b. Considerando el ciclo de trabajo y la frecuencia del PWM, ¿cómo impacta en estos el hecho de que el conversor sea de 8 o 10 bits?
+
+El tipo de conversor presentado en la figura es un conversor digital a analógico. 
+	a. La señal de entrada digital input maneja el CT (ciclo de trabajo) del PWM, luego utiliza un filtro pasa bajo RC 	para convertir a señal continua.
+	b. 
+
+2. ¿A qué protocolo de comunicación corresponden las señales que muestra la figura? 
+	a. Describa brevemente sus características.
+	b. Indique el sentido de cada una de las señales entre los dispositivos implicados en la comunicación.
+
+
+Las señales que se muestran en la figura corresponden a un protocolo de comunicación serie denominado SPI.
+	a. Este protocolo trata de que un maestro puede seleccionar a través de la señal CS a un esclavo (pero no sabe de 	la existencia del mismo, solo lo puede seleccionar). Es una comunicación full-duplex (puede enviar y recibir datos 	al mismo tiempo, simultáneamente). Es más rápido que I2C. Para distancias cortas.
+	Este protocolo utiliza 4 señales CS (sirve para seleccionar al esclavo), el reloj CLK (sincronización), MOSI 		(salida de datos del maestro y entrada de datos al esclavo), MISO (salida de datos del esclavo y entrada de datos 	al maestro).
+	El CS se pone en bajo e indica que inicia al transmisión al haber seleccionado un esclavo, luego cuando se pone en 	alto indica que se detiene la transmisión (parada).
+
+3. Utilizando la documentación disponible en el adjunto identifique el número de pin del microcontrolador ESP32-C6 responsable de leer el estado del pulsador SW2.
+
