@@ -36,7 +36,7 @@
 #include "switch.h"
 #include "analog_io_mcu.h"
 #include "uart_mcu.h"
-
+#include "timer_mcu.h"
 /*==================[macros and definitions]=================================*/
 // El sistema debe realizar mediciones de distancia a razón de 10 muestras por segundo, esto es 10 veces en un segundo.
 // P = 1/F = 1/10 = 0.1 s = 100 ms.
@@ -45,17 +45,17 @@
  * @brief Tiempo de refresco de medición de distancia y actualización de LEDs en milisegundos.
  */
 #define CONFIG_DELAY 100 
-// 200 muestras en un segundo -> P = 1 / 200 = 0.005 s = 5 ms
-/**
- * @def CONFIG_DELAY_BALANZA
- * @brief Tiempo de refresco de medición de peso.
- */
-#define CONFIG_DELAY_BALANZA 5
+
 /**
  * @def GPIO_Barrera
  * @brief GPIO al que se le conecta la barrera.
  */
 #define GPIO_Barrera GPIO_11
+
+/** @def CONFIG_TIMER_ADC
+ * @brief tiempo en micro segundos del TIMER_ADC
+*/
+#define CONFIG_TIMER_ADC 5000 // 200 muestras por segundo -> 1/200 = 0.005 s x 1000000 = 5000 microseg.
 
 /**
  * @var distancia
@@ -67,47 +67,62 @@ uint16_t distancia;
  * @brief Variable que almacena la distancia calculada a través de la distancia y del tiempo.
 */
 uint16_t velocidad;
-/**
- * @var peso1
- * @brief Variable que almacena el peso medido por la galga 1
-*/
-uint16_t peso1;
-/**
- * @var peso2
- * @brief Variable que almacena el peso medido por la galga 2
-*/
-uint16_t peso2;
-/**
- * @var peso_total
- * @brief Variable que almacena el peso total, resultado de la suma de peso1 y peso2
-*/
-uint16_t peso_total;
+
 /**
  * @var data
  * @brief Almacena los datos que se reciben por la UART
 */
 uint8_t data;
-/**
- * @brief Booleano que indica si se realiza la medición (activo/inactivo).
- */
-bool on = 0;
 
+/*! @brief Variable para almacenar la medicion anterior del sensor HC-SR04.*/
+uint16_t distancia_anterior = 0;
+
+/*! @brief Variable auxiliar para contar la cantidad de muestras a promediar.*/
+uint8_t muestras = 0;
+
+/*! @brief Variable que almacena el valor de la medición de la galga 1.*/
+uint16_t balanza_1 = 0;
+
+/*! @brief Variable que almacena el valor de la medición de la galga 2*/
+uint16_t balanza_2 = 0;
+
+/*! @brief Variable que almacena el valor de la medición de la galga 1 en Kg*/
+uint16_t peso_1 = 0;
+
+/*! @brief Variable que almacena el valor de la medición de la galga 2 en Kg*/
+uint16_t peso_2 = 0;
+
+/*! @brief Variable que almacena el valor promediado del peso total*/
+uint16_t peso_total = 0;
+
+/*! @brief Variable que almacena la velocidad maxima calculada.*/
+uint16_t velocidad_maxima = 0;
 /*==================[internal data definition]===============================*/
 
 TaskHandle_t operar_distancia_task_handle = NULL;
-TaskHandle_t operar_peso_task_handle = NULL;
 
+TaskHandle_t adc_conversion_task_handle = NULL;
 /*==================[internal functions declaration]=========================*/
+/**
+ * @brief Manejador de interrupción del Temporizador. Activa la tarea de conversión ADC.
+ * @param[in] pvParameter puntero tipo void
+ */
+void FuncTimerADC(void* param){
+	vTaskNotifyGiveFromISR(adc_conversion_task_handle, pdFALSE);
+}
+
 /** 
 * @brief Encargada de medir la distancia y a traves de la misma la velcoidad para luego controlar los LEDs según la velocidad calculada
 * @param[in] pvParameter puntero tipo void 
 */
 static void OperarConDistancia(void *pvParameter);
+
 /** 
 * @brief Realiza la medición del peso del vehículo cuando el mismo se encuentra detenido.
 * @param[in] pvParameter puntero tipo void 
 */
 static void OperarConPeso(void *pvParameter);
+
  /**
  * @brief Lee datos recibidos por la UART (a través del puerto UART_PC). 
  * @param[in] param puntero tipo void 
@@ -124,24 +139,33 @@ void RecibirData(void* param);
 // Velocidad = delta distancia / delta tiempo 
 // Medir distancia
 
+void FuncTimerADC(void* param){
+	vTaskNotifyGiveFromISR(adc_conversion_task_handle, pdFALSE);
+}
+
 
 static void OperarConDistancia(void *pvParameter){
     while(true){
-		if(on == 1)
-		{
+
 			// Medir distancia
 			distancia = HcSr04ReadDistanceInCentimeters(); // para medir la distancia a un objeto usando el sensor y devolver esa distancia en centímetros. 
 			distancia = distancia/100; // El sensor de ultrasonido toma la distancia en unidad de cm, lo necesito en unidad de metros.
-			
+
 			if(distancia < 10){ // Si la distancia es menor a 10m, se calcula la velocidad.
-			velocidad = distancia/0.1; // 0.1 s es el tiempo de cada muestra.
+				velocidad = (distancia_anterior - distancia)/0.1; 
+				
+				if(velocidad>velocidad_maxima){
+					velocidad_maxima = velocidad;
+				}
+
+				UartSendString(UART_PC, "Velocidad maxima: ");
+				UartSendString(UART_PC, (char *)UartItoa(velocidad_maxima, 10));
+				UartSendString(UART_PC, " m/s\r\n");
 
 				if(velocidad > 8){
 					LedOff(LED_1);
 					LedOff(LED_2);
 					LedOn(LED_3);
-					UartSendString(UART_CONNECTOR,">Velocidad máxima:");
-					UartSendString(UART_CONNECTOR, (char*)peso_total);
 				}
 				else if (velocidad > 0 && velocidad < 8){
 					LedOff(LED_1);
@@ -152,42 +176,45 @@ static void OperarConDistancia(void *pvParameter){
 					LedOn(LED_1);
 					LedOff(LED_2);
 					LedOff(LED_3);
-
+					// Notificar la tarea MedirPeso para que lea las mediciones de peso.
+                	FuncTimerADC(NULL);
 				}
 		}
 		
-    }
+    distancia_anterior = distancia; // actualizo el valor de la distancia anterior después de cada ciclo de medición.
 	vTaskDelay(CONFIG_DELAY / portTICK_PERIOD_MS);
 }
 }
 
-static void OperarConPeso(void *pvParameter) {
-	 
-	 while(true){
-		if(on == 1)
-		{
-			// Vuelvo a medir distancia
-			distancia = HcSr04ReadDistanceInCentimeters(); // para medir la distancia a un objeto usando el sensor y devolver esa distancia en centímetros. 
-			distancia = distancia/100; // El sensor de ultrasonido toma la distancia en unidad de cm, lo necesito en unidad de metros.
+// Tarea para medir el peso (200 muestras por segundo)
+static void MedirPeso(void *pvParameter) {
+    while(true) {
+        // Esperar la notificación de que el vehículo está detenido
+        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+
+        // Solo se realizan las mediciones de peso cuando el vehículo está detenido
+        if(muestras < 50) { // Se van acumulando valores del peso
+            // Leer las mediciones de las balanzas
+            AnalogInputReadSingle(CH1, &balanza_1);
+            AnalogInputReadSingle(CH2, &balanza_2);
+
+            // Convertir las mediciones de mV a Kg
+            peso_1 += balanza_1 * 20000 / 3300;
+            peso_2 += balanza_2 * 20000 / 3300;
+
+            muestras++;
+        }
+
+        else{ // muestras >= 50. Se calcula el promedio de las mediciones acumuladas anteriormente
+            peso_total = (peso_1 + peso_2) / 50;
 			
-			if(distancia < 10){ // Si la distancia es menor a 10m, se calcula la velocidad.
-			velocidad = distancia/0.1; // 0.1 s es el tiempo de cada muestra.
+			UartSendString(UART_PC, "Peso: ");
+			UartSendString(UART_PC,  (char *)UartItoa(peso_total, 10));
+			UartSendString(UART_PC, " kg\r\n");
 
+        }
 
-				AnalogInputReadSingle(CH1, &peso1); //conversión analógica digital 
-				AnalogInputReadSingle(CH2, &peso2); //conversión analógica digital 
-				peso1 = 50*((peso1 * 20000) / 3.3); // Galga 1: conversión de V a Kg 50 veces.
-				peso2 = 50*((peso2 * 20000) / 3.3); // Galga 2: conversión de V a Kg 50 veces.
-
-				peso_total = peso1 + peso2; 
-				
-				UartSendString(UART_CONNECTOR,">Peso:");
-				UartSendString(UART_CONNECTOR, (char*)peso_total);
-				}
-		}
-		
     }
-	vTaskDelay(CONFIG_DELAY_BALANZA / portTICK_PERIOD_MS);
 }
 
 void RecibirData(void* param){
@@ -210,6 +237,13 @@ void app_main(void){
 	LedsInit();
 	HcSr04Init(GPIO_3, GPIO_2); // Inicializa el sensor configurando los pines 3 y 2 como los pines de disparo (trigger) y eco (echo) respectivamente.
 	
+	timer_config_t timer_conv_ADC = {
+	.timer = TIMER_A,
+	.period = CONFIG_TIMER_ADC,
+	.func_p = FuncTimerADC,
+	.param_p = NULL
+    };
+
 	analog_input_config_t config_ADC_1 = {
 	.input = CH1,
 	.mode = ADC_SINGLE,
@@ -233,20 +267,15 @@ void app_main(void){
 	.param_p = NULL
 	};
 
-	serial_config_t Uart_Connector = {
-    .port = UART_CONNECTOR,
-    .baud_rate = 115200,
-    .func_p = NULL,
-    .param_p = NULL,
-    };
-
 	AnalogInputInit(&config_ADC_1);
 	AnalogInputInit(&config_ADC_2);
 	GPIOInit(GPIO_Barrera, GPIO_OUTPUT);
 	UartInit(&Uart_Pc);
-	UartInit(&Uart_Connector);
+	TimerInit(&timer_conv_ADC);
+	TimerStart(timer_conv_ADC.timer);
 	
 	xTaskCreate(&OperarConDistancia, "OperarConDistancia", 4096, NULL, 5, &operar_distancia_task_handle);
-	xTaskCreate(&OperarConPeso, "OperarConPeso", 4096, NULL, 5, &operar_peso_task_handle);
+	xTaskCreate(&OperarConPeso, "OperarConPeso", 4096, NULL, 5, &adc_conversion_task_handle);
+
 }
 /*==================[end of file]============================================*/

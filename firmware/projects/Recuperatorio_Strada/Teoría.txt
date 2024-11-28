@@ -18,3 +18,5 @@ Las señales que se muestran en la figura corresponden a un protocolo de comunic
 
 3. Utilizando la documentación disponible en el adjunto identifique el número de pin del microcontrolador ESP32-C6 responsable de leer el estado del pulsador SW2.
 
+Pin 27.
+
