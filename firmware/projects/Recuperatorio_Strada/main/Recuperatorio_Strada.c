@@ -146,12 +146,13 @@ void FuncTimerADC(void* param){
 
 static void OperarConDistancia(void *pvParameter){
     while(true){
-
+			uint32_t i = 0;  // Inicializamos el contador
 			// Medir distancia
 			distancia = HcSr04ReadDistanceInCentimeters(); // para medir la distancia a un objeto usando el sensor y devolver esa distancia en centímetros. 
 			distancia = distancia/100; // El sensor de ultrasonido toma la distancia en unidad de cm, lo necesito en unidad de metros.
-
-			if(distancia < 10){ // Si la distancia es menor a 10m, se calcula la velocidad.
+			
+			i++; // Incrementamos el contador cada vez que se lee la distancia
+			if(distancia < 10 && i > 1){ // Si la distancia es menor a 10m, se calcula la velocidad.
 				velocidad = (distancia_anterior - distancia)/0.1; 
 				
 				if(velocidad>velocidad_maxima){
@@ -176,8 +177,8 @@ static void OperarConDistancia(void *pvParameter){
 					LedOn(LED_1);
 					LedOff(LED_2);
 					LedOff(LED_3);
-					// Notificar la tarea MedirPeso para que lea las mediciones de peso.
-                	FuncTimerADC(NULL);
+					// Notificar la tarea OperarConPeso para que lea las mediciones de peso.
+                	xTaskNotifyGive(adc_conversion_task_handle);
 				}
 		}
 		
@@ -187,7 +188,7 @@ static void OperarConDistancia(void *pvParameter){
 }
 
 // Tarea para medir el peso (200 muestras por segundo)
-static void MedirPeso(void *pvParameter) {
+static void OperarConPeso(void *pvParameter) {
     while(true) {
         // Esperar la notificación de que el vehículo está detenido
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
