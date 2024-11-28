@@ -97,6 +97,11 @@ uint16_t peso_total = 0;
 
 /*! @brief Variable que almacena la velocidad maxima calculada.*/
 uint16_t velocidad_maxima = 0;
+
+/**
+ * @brief Booleano que indica si se realiza la medición (activo/inactivo) del peso.
+ */
+bool medirpeso = 0;
 /*==================[internal data definition]===============================*/
 
 TaskHandle_t operar_distancia_task_handle = NULL;
@@ -157,28 +162,27 @@ static void OperarConDistancia(void *pvParameter){
 				
 				if(velocidad>velocidad_maxima){
 					velocidad_maxima = velocidad;
+					medirpeso=0;
 				}
-
-				UartSendString(UART_PC, "Velocidad maxima: ");
-				UartSendString(UART_PC, (char *)UartItoa(velocidad_maxima, 10));
-				UartSendString(UART_PC, " m/s\r\n");
 
 				if(velocidad > 8){
 					LedOff(LED_1);
 					LedOff(LED_2);
 					LedOn(LED_3);
+					medirpeso=0;
 				}
 				else if (velocidad > 0 && velocidad < 8){
 					LedOff(LED_1);
 					LedOn(LED_2);
 					LedOff(LED_3);
+					medirpeso=0;
 				}
 				else if(velocidad = 0){
 					LedOn(LED_1);
 					LedOff(LED_2);
 					LedOff(LED_3);
-					// Notificar la tarea OperarConPeso para que lea las mediciones de peso.
-                	xTaskNotifyGive(adc_conversion_task_handle);
+					
+                	medirpeso=1;
 				}
 		}
 		
@@ -190,32 +194,44 @@ static void OperarConDistancia(void *pvParameter){
 // Tarea para medir el peso (200 muestras por segundo)
 static void OperarConPeso(void *pvParameter) {
     while(true) {
-        // Esperar la notificación de que el vehículo está detenido
-        ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-        // Solo se realizan las mediciones de peso cuando el vehículo está detenido
-        if(muestras < 50) { // Se van acumulando valores del peso
-            // Leer las mediciones de las balanzas
-            AnalogInputReadSingle(CH1, &balanza_1);
-            AnalogInputReadSingle(CH2, &balanza_2);
+		if(medirpeso==1){
+			// Esperar la notificación de que el vehículo está detenido
+			ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
 
-            // Convertir las mediciones de mV a Kg
-            peso_1 += balanza_1 * 20000 / 3300;
-            peso_2 += balanza_2 * 20000 / 3300;
+			// Solo se realizan las mediciones de peso cuando el vehículo está detenido
+			if(muestras < 50) { // Se van acumulando valores del peso
+				// Leer las mediciones de las balanzas
+				AnalogInputReadSingle(CH1, &balanza_1);
+				AnalogInputReadSingle(CH2, &balanza_2);
 
-            muestras++;
-        }
+				// Convertir las mediciones de mV a Kg
+				peso_1 += balanza_1 * 20000 / 3300;
+				peso_2 += balanza_2 * 20000 / 3300;
 
-        else{ // muestras >= 50. Se calcula el promedio de las mediciones acumuladas anteriormente
-            peso_total = (peso_1 + peso_2) / 50;
-			
-			UartSendString(UART_PC, "Peso: ");
-			UartSendString(UART_PC,  (char *)UartItoa(peso_total, 10));
-			UartSendString(UART_PC, " kg\r\n");
+				muestras++;
+			}
 
-        }
+			else{ // muestras >= 50. Se calcula el promedio de las mediciones acumuladas anteriormente
+				peso_total = (peso_1 + peso_2) / 50;
+				// Reset para próximas mediciones
+				peso_1 =0;
+				peso_2 =0;
+				muestras = 0;
+				EnviarDatosUART(peso_total, velocidad_maxima);
+			}
+	}
 
     }
+}
+
+void EnviarDatosUART(int peso, int velocidad) {
+   UartSendString(UART_PC, "Peso: ");
+    UartSendString(UART_PC, (char *)UartItoa(peso, 10));
+    UartSendString(UART_PC, " kg, Velocidad máxima: ");
+    UartSendString(UART_PC, (char *)UartItoa(velocidad, 10));
+    UartSendString(UART_PC, " m/s\r\n");
+    
 }
 
 void RecibirData(void* param){
