@@ -44,29 +44,104 @@
 #include "gpio_mcu.h"
 #include "led.h"
 /*==================[macros and definitions]=================================*/
+/** @def GPIO_ELECTROVALVULA
+ * @brief GPIO al que se conecta la electrovalvula
+*/
 #define GPIO_ELECTROVALVULA GPIO_20
+
+/** @def GPIO_ALIMENTO
+ * @brief GPIO al que se conecta el alimento
+*/
 #define GPIO_ALIMENTO GPIO_10
 
+/** @def CONFIG_TIMER_A
+ * @brief tiempo en micro segundos del TIMER_A
+*/
 #define CONFIG_TIMER_A (5*1000*1000) // Mediciones cada 5 seg
+
+/**
+ * @def CONFIG_DELAY
+ * @brief Tiempo de refresco de medición de nivel de agua y para enviar datos por UART
+ */
 #define CONFIG_DELAY 5000 // 5 seg = 5000 ms 
 /*==================[internal data definition]===============================*/
-void FuncTimerA(void *param);
-static void SuministroAgua(void *pvParameters);
-static void SuministroAlimentos(void *pvParameter);
-static void EnviarDatosUART(void *pvParameter);
-static void LecturaSwitch1Encendido();
-static void LecturaSwitch1Apagado();
-static void IndicarQueEstaEncendido();
-
-uint16_t recipiente;
-uint16_t nivel_de_agua;
-uint16_t balanza = 0;
-uint16_t peso = 0;
-bool on = 0;
-
 TaskHandle_t suministro_agua_task_handle = NULL;
 TaskHandle_t suministro_alimentos_task_handle = NULL;
 TaskHandle_t enviar_datos_uart_task_handle = NULL;
+
+/**
+ * @var capacidad_recipiente
+ * @brief variable que almacena la capacidad actual del recipiente
+*/
+uint16_t capacidad_recipiente;
+
+/**
+ * @var nivel_de_agua
+ * @brief variable que almacena la distancia medida por el sensor de ultrasonido
+*/
+uint16_t nivel_de_agua;
+
+/**
+ * @var balanza
+ * @brief variable que almacena el valor de la medición de la balanza analógica
+*/
+uint16_t balanza = 0;
+
+/**
+ * @var peso
+ * @brief variable que almacena el valor del peso calculado a partir de balanza
+*/
+uint16_t peso = 0;
+
+/**
+ * @var on
+ * @brief booleano que indica si el sistema está activo
+*/
+bool on = 0;
+
+/**
+ * @fn void FuncTimerA(void *param)
+ * @brief Notifica a la tarea de suministros de alimentos para que se encuentre lista
+ * @param[in] param puntero tipo void
+ */
+void FuncTimerA(void *param);
+
+/** 
+* @brief Acciona la electrovalvula según la capacidad del recipiente de agua que se esté midiendo
+* @param[in] pvParameter puntero tipo void.
+*/
+static void SuministroAgua(void *pvParameters);
+
+/** 
+* @brief Mide el peso del recipiente y según este suministra o no alimetos
+* @param[in] pvParameter puntero tipo void.
+*/
+static void SuministroAlimentos(void *pvParameter);
+
+/** 
+* @brief controla el envío de datos por la UART acerca del estado del sistema
+* @param[in] pvParameter puntero tipo void 
+*/
+static void EnviarDatosUART(void *pvParameter);
+
+/**
+ * @fn static void LecturaSwitch1Encendido ()
+ * @brief Se ejecuta al presionarse la tecla 1, pone on en alto
+ */
+static void LecturaSwitch1Encendido();
+
+/**
+ * @fn static void LecturaSwitch1Apagado ()
+ * @brief Se ejecuta al presionarse la tecla 1, pone on en bajo
+ */
+static void IndicarQueEstaEncendido();
+
+/**
+ * @fn static void LecturaSwitch1Apagado ()
+ * @brief Si on está en alto, se prende LED_1
+ */
+static void IndicarQueEstaEncendido();
+
 /*==================[internal functions declaration]=========================*/
 void FuncTimerA(void* param)
 {
@@ -80,14 +155,23 @@ static void SuministroAgua(void *pvParameters) // ver si poder configdelay o tim
 	while(true)
 	{
 		nivel_de_agua = HcSr04ReadDistanceInCentimeters(); // La distancia que se mida con el sensor va a ser proporcional al nivel del agua
-		if(nivel_de_agua<500){
-			GPIOon(GPIO_ELECTROVALVULA);
+		nivel_de_agua = 30 - nivel_de_agua; // El sensor está ubicado a 30 cm de la base del recipiente 
+		
+		// Debo sacar el volumen del recipiente con este nivel de agua que estoy midiendo.
+		// V = (2*pi*r^2) * altura -> altura es el nivel de agua.
+		// 2*pi*r^2 = 2*pi*(10 cm)^2 = 628.3 cm^2
+		capacidad_recipiente = 628.3 * nivel_de_agua;  // Capacidad actual del recipiente
+		
+		// capacidad_recipiente tiene unidades de cm^3 que equivale a ml.
+
+		if(capacidad_recipiente<500){  // Si la capacidad actual del recipiente es menor a medio litro
+			GPIOon(GPIO_ELECTROVALVULA); // Acciono la electrovalvula
 		}
-		if (nivel_de_agua>=2500) {
-			GPIOoff(GPIO_ELECTROVALVULA);
+		if (capacidad_recipiente>=2500) { // Cuando la capacidad actual del recipiente sea igual o mayor a 2500 ml
+			GPIOoff(GPIO_ELECTROVALVULA); // Se cierra la electrovalvula
 		}
 
-		vTaskDelay(CONFIG_DELAY / portTICK_PERIOD_MS);
+		vTaskDelay(CONFIG_DELAY / portTICK_PERIOD_MS); // 5 seg
 	}
 }
 
@@ -105,7 +189,7 @@ static void SuministroAlimentos(void *pvParameter) {
 
 			GPIOon(GPIO_ALIMENTO);
 		}
-		if(peso > 50 && peso < 500) { // Siempre que se registre un peso entre 50 y 500 gr, se deberá colocar el alimento
+		if(peso > 50 && peso < 500) { // Siempre que se registre un peso entre 50 y 500 gr, se deberá colocar alimento al recipiente
 
 			GPIOon(GPIO_ALIMENTO);
 
@@ -122,7 +206,7 @@ static void EnviarDatosUART(void *pvParameter) {
     while(true) {
 
     UartSendString(UART_PC, "Agua: ");
-	UartSendString(UART_PC, (char *)UartItoa(nivel_de_agua, 10));
+	UartSendString(UART_PC, (char *)UartItoa(capacidad_recipiente, 10));
 	UartSendString(UART_PC, " cm^3 , \r\n");
     UartSendString(UART_PC, " Alimento ");
     UartSendString(UART_PC, (char *)UartItoa(peso, 10));
