@@ -1,0 +1,462 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.11.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>FinalStrada: Referencia del archivo C:/Users/Fatim/Desktop/Facultad/Programable/Repositorios/Strada_2C_2024/firmware/projects/Final_Strada/main/Final_Strada.c</title>
+<link rel="icon" href="icon.ico" type="image/x-icon" />
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+  $(function() { init_search(); });
+/* @license-end */
+</script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectalign">
+   <div id="projectname">FinalStrada<span id="projectnumber">&#160;1.0</span>
+   </div>
+  </td>
+    <td>        <div id="MSearchBox" class="MSearchBoxInactive">
+        <span class="left">
+          <span id="MSearchSelect"                onmouseover="return searchBox.OnSearchSelectShow()"                onmouseout="return searchBox.OnSearchSelectHide()">&#160;</span>
+          <input type="text" id="MSearchField" value="" placeholder="Buscar" accesskey="S"
+               onfocus="searchBox.OnSearchFieldFocus(true)" 
+               onblur="searchBox.OnSearchFieldFocus(false)" 
+               onkeyup="searchBox.OnSearchFieldChange(event)"/>
+          </span><span class="right">
+            <a id="MSearchClose" href="javascript:searchBox.CloseResultsWindow()"><img id="MSearchCloseImg" border="0" src="search/close.svg" alt=""/></a>
+          </span>
+        </div>
+</td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.11.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('_final___strada_8c.html',''); initResizable(true); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#define-members">defines</a> &#124;
+<a href="#func-members">Funciones</a> &#124;
+<a href="#var-members">Variables</a>  </div>
+  <div class="headertitle"><div class="title">Referencia del archivo Final_Strada.c</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;stdio.h&gt;</code><br />
+<code>#include &lt;stdint.h&gt;</code><br />
+<code>#include &lt;stdlib.h&gt;</code><br />
+<code>#include &lt;stdbool.h&gt;</code><br />
+<code>#include &quot;freertos/FreeRTOS.h&quot;</code><br />
+<code>#include &quot;freertos/task.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="analog__io__mcu_8h_source.html">analog_io_mcu.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="timer__mcu_8h_source.html">timer_mcu.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="uart__mcu_8h_source.html">uart_mcu.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="switch_8h_source.html">switch.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="gpio__mcu_8h_source.html">gpio_mcu.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="led_8h_source.html">led.h</a>&quot;</code><br />
+</div>
+<p><a href="_final___strada_8c_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="define-members" name="define-members"></a>
+defines</h2></td></tr>
+<tr class="memitem:a0c26ca2d0c73549b8fe9c987d3606c57" id="r_a0c26ca2d0c73549b8fe9c987d3606c57"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0c26ca2d0c73549b8fe9c987d3606c57">GPIO_ELECTROVALVULA</a>&#160;&#160;&#160;<a class="el" href="group___g_i_o_p.html#ggaf65604147d0244c9b13cfdc865ad5393a081be372da926e3ca6f612b267854e95">GPIO_20</a></td></tr>
+<tr class="memdesc:a0c26ca2d0c73549b8fe9c987d3606c57"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO al que se conecta la electrovalvula.  <br /></td></tr>
+<tr class="separator:a0c26ca2d0c73549b8fe9c987d3606c57"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9dcfc6401c7afd480f86a3ff6b69da0f" id="r_a9dcfc6401c7afd480f86a3ff6b69da0f"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9dcfc6401c7afd480f86a3ff6b69da0f">GPIO_ALIMENTO</a>&#160;&#160;&#160;<a class="el" href="group___g_i_o_p.html#ggaf65604147d0244c9b13cfdc865ad5393a3943e6071dec78b6bcf9586cf0de6dd3">GPIO_10</a></td></tr>
+<tr class="memdesc:a9dcfc6401c7afd480f86a3ff6b69da0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">GPIO al que se conecta el alimento.  <br /></td></tr>
+<tr class="separator:a9dcfc6401c7afd480f86a3ff6b69da0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a566852534dddb456424b8f5f661c8913" id="r_a566852534dddb456424b8f5f661c8913"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a566852534dddb456424b8f5f661c8913">CONFIG_TIMER_A</a>&#160;&#160;&#160;(5*1000*1000)</td></tr>
+<tr class="memdesc:a566852534dddb456424b8f5f661c8913"><td class="mdescLeft">&#160;</td><td class="mdescRight">tiempo en micro segundos del TIMER_A  <br /></td></tr>
+<tr class="separator:a566852534dddb456424b8f5f661c8913"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a841762c2db76b59d9f88bfc9de0de3d4" id="r_a841762c2db76b59d9f88bfc9de0de3d4"><td class="memItemLeft" align="right" valign="top">#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a841762c2db76b59d9f88bfc9de0de3d4">CONFIG_DELAY</a>&#160;&#160;&#160;5000</td></tr>
+<tr class="memdesc:a841762c2db76b59d9f88bfc9de0de3d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tiempo de refresco de medición de nivel de agua y para enviar datos por UART.  <br /></td></tr>
+<tr class="separator:a841762c2db76b59d9f88bfc9de0de3d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:afaccfed84cd1498a05ea04a65f1209b1" id="r_afaccfed84cd1498a05ea04a65f1209b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afaccfed84cd1498a05ea04a65f1209b1">FuncTimerA</a> (void *param)</td></tr>
+<tr class="memdesc:afaccfed84cd1498a05ea04a65f1209b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Notifica a la tarea de suministros de alimentos para que se encuentre lista.  <br /></td></tr>
+<tr class="separator:afaccfed84cd1498a05ea04a65f1209b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a630544a7f0a2cc40d8a7fefab7e2fe70" id="r_a630544a7f0a2cc40d8a7fefab7e2fe70"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a630544a7f0a2cc40d8a7fefab7e2fe70">app_main</a> (void)</td></tr>
+<tr class="separator:a630544a7f0a2cc40d8a7fefab7e2fe70"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="var-members" name="var-members"></a>
+Variables</h2></td></tr>
+<tr class="memitem:abdd8d12f2be3be139bcc39495ebfc222" id="r_abdd8d12f2be3be139bcc39495ebfc222"><td class="memItemLeft" align="right" valign="top">TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abdd8d12f2be3be139bcc39495ebfc222">suministro_agua_task_handle</a> = <a class="el" href="ili9341_8c.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a></td></tr>
+<tr class="separator:abdd8d12f2be3be139bcc39495ebfc222"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6093010d64df0029bcb670fd8af4a5a4" id="r_a6093010d64df0029bcb670fd8af4a5a4"><td class="memItemLeft" align="right" valign="top">TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6093010d64df0029bcb670fd8af4a5a4">suministro_alimentos_task_handle</a> = <a class="el" href="ili9341_8c.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a></td></tr>
+<tr class="separator:a6093010d64df0029bcb670fd8af4a5a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9db0362c0a3fee6f4d05e7b02d7efa6a" id="r_a9db0362c0a3fee6f4d05e7b02d7efa6a"><td class="memItemLeft" align="right" valign="top">TaskHandle_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9db0362c0a3fee6f4d05e7b02d7efa6a">enviar_datos_uart_task_handle</a> = <a class="el" href="ili9341_8c.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a></td></tr>
+<tr class="separator:a9db0362c0a3fee6f4d05e7b02d7efa6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8025a9a26ceecd12ec13bf4108fd6dee" id="r_a8025a9a26ceecd12ec13bf4108fd6dee"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8025a9a26ceecd12ec13bf4108fd6dee">capacidad_recipiente</a></td></tr>
+<tr class="memdesc:a8025a9a26ceecd12ec13bf4108fd6dee"><td class="mdescLeft">&#160;</td><td class="mdescRight">variable que almacena la capacidad actual del recipiente  <br /></td></tr>
+<tr class="separator:a8025a9a26ceecd12ec13bf4108fd6dee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab5bb03dc93c3f059a5fcb4df13f69b4b" id="r_ab5bb03dc93c3f059a5fcb4df13f69b4b"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab5bb03dc93c3f059a5fcb4df13f69b4b">nivel_de_agua</a></td></tr>
+<tr class="memdesc:ab5bb03dc93c3f059a5fcb4df13f69b4b"><td class="mdescLeft">&#160;</td><td class="mdescRight">variable que almacena la distancia medida por el sensor de ultrasonido  <br /></td></tr>
+<tr class="separator:ab5bb03dc93c3f059a5fcb4df13f69b4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb02d93c1a9ca8c8849764aa3cdd7fd7" id="r_acb02d93c1a9ca8c8849764aa3cdd7fd7"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acb02d93c1a9ca8c8849764aa3cdd7fd7">balanza</a> = 0</td></tr>
+<tr class="memdesc:acb02d93c1a9ca8c8849764aa3cdd7fd7"><td class="mdescLeft">&#160;</td><td class="mdescRight">variable que almacena el valor de la medición de la balanza analógica  <br /></td></tr>
+<tr class="separator:acb02d93c1a9ca8c8849764aa3cdd7fd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24d2a442459d88d5450264dbf05d595f" id="r_a24d2a442459d88d5450264dbf05d595f"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a24d2a442459d88d5450264dbf05d595f">peso</a> = 0</td></tr>
+<tr class="memdesc:a24d2a442459d88d5450264dbf05d595f"><td class="mdescLeft">&#160;</td><td class="mdescRight">variable que almacena el valor del peso calculado a partir de balanza  <br /></td></tr>
+<tr class="separator:a24d2a442459d88d5450264dbf05d595f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaa928c9a62449f7946da1e32f66c70d2" id="r_aaa928c9a62449f7946da1e32f66c70d2"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaa928c9a62449f7946da1e32f66c70d2">on</a> = 0</td></tr>
+<tr class="memdesc:aaa928c9a62449f7946da1e32f66c70d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">booleano que indica si el sistema está activo  <br /></td></tr>
+<tr class="separator:aaa928c9a62449f7946da1e32f66c70d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Documentación de «define»</h2>
+<a id="a841762c2db76b59d9f88bfc9de0de3d4" name="a841762c2db76b59d9f88bfc9de0de3d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a841762c2db76b59d9f88bfc9de0de3d4">&#9670;&#160;</a></span>CONFIG_DELAY</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CONFIG_DELAY&#160;&#160;&#160;5000</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Tiempo de refresco de medición de nivel de agua y para enviar datos por UART. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_final___strada_8c_source.html#l00066">66</a> del archivo <a class="el" href="_final___strada_8c_source.html">Final_Strada.c</a>.</p>
+
+</div>
+</div>
+<a id="a566852534dddb456424b8f5f661c8913" name="a566852534dddb456424b8f5f661c8913"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a566852534dddb456424b8f5f661c8913">&#9670;&#160;</a></span>CONFIG_TIMER_A</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define CONFIG_TIMER_A&#160;&#160;&#160;(5*1000*1000)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>tiempo en micro segundos del TIMER_A </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_final___strada_8c_source.html#l00060">60</a> del archivo <a class="el" href="_final___strada_8c_source.html">Final_Strada.c</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_final___strada_8c_source.html#l00239">app_main()</a>.</p>
+
+</div>
+</div>
+<a id="a9dcfc6401c7afd480f86a3ff6b69da0f" name="a9dcfc6401c7afd480f86a3ff6b69da0f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9dcfc6401c7afd480f86a3ff6b69da0f">&#9670;&#160;</a></span>GPIO_ALIMENTO</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define GPIO_ALIMENTO&#160;&#160;&#160;<a class="el" href="group___g_i_o_p.html#ggaf65604147d0244c9b13cfdc865ad5393a3943e6071dec78b6bcf9586cf0de6dd3">GPIO_10</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>GPIO al que se conecta el alimento. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_final___strada_8c_source.html#l00055">55</a> del archivo <a class="el" href="_final___strada_8c_source.html">Final_Strada.c</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_final___strada_8c_source.html#l00239">app_main()</a>.</p>
+
+</div>
+</div>
+<a id="a0c26ca2d0c73549b8fe9c987d3606c57" name="a0c26ca2d0c73549b8fe9c987d3606c57"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0c26ca2d0c73549b8fe9c987d3606c57">&#9670;&#160;</a></span>GPIO_ELECTROVALVULA</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">#define GPIO_ELECTROVALVULA&#160;&#160;&#160;<a class="el" href="group___g_i_o_p.html#ggaf65604147d0244c9b13cfdc865ad5393a081be372da926e3ca6f612b267854e95">GPIO_20</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>GPIO al que se conecta la electrovalvula. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_final___strada_8c_source.html#l00050">50</a> del archivo <a class="el" href="_final___strada_8c_source.html">Final_Strada.c</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_final___strada_8c_source.html#l00239">app_main()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Documentación de funciones</h2>
+<a id="a630544a7f0a2cc40d8a7fefab7e2fe70" name="a630544a7f0a2cc40d8a7fefab7e2fe70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a630544a7f0a2cc40d8a7fefab7e2fe70">&#9670;&#160;</a></span>app_main()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void app_main </td>
+          <td>(</td>
+          <td class="paramtype">void</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="_final___strada_8c_source.html#l00239">239</a> del archivo <a class="el" href="_final___strada_8c_source.html">Final_Strada.c</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="analog__io__mcu_8h_source.html#l00038">ADC_SINGLE</a>, <a class="el" href="analog__io__mcu_8c_source.html#l00045">AnalogInputInit()</a>, <a class="el" href="analog__io__mcu_8h_source.html#l00032">CH1</a>, <a class="el" href="_final___strada_8c_source.html#l00060">CONFIG_TIMER_A</a>, <a class="el" href="_final___strada_8c_source.html#l00070">enviar_datos_uart_task_handle</a>, <a class="el" href="_final___strada_8c_source.html#l00146">FuncTimerA()</a>, <a class="el" href="gpio__mcu_8h_source.html#l00054">GPIO_2</a>, <a class="el" href="gpio__mcu_8h_source.html#l00055">GPIO_3</a>, <a class="el" href="_final___strada_8c_source.html#l00055">GPIO_ALIMENTO</a>, <a class="el" href="_final___strada_8c_source.html#l00050">GPIO_ELECTROVALVULA</a>, <a class="el" href="gpio__mcu_8h_source.html#l00044">GPIO_OUTPUT</a>, <a class="el" href="gpio__mcu_8c_source.html#l00067">GPIOInit()</a>, <a class="el" href="hc__sr04_8c_source.html#l00034">HcSr04Init()</a>, <a class="el" href="analog__io__mcu_8h_source.html#l00049">analog_input_config_t::input</a>, <a class="el" href="led_8c_source.html#l00031">LedsInit()</a>, <a class="el" href="ili9341_8c_source.html#l00019">NULL</a>, <a class="el" href="uart__mcu_8h_source.html#l00039">serial_config_t::port</a>, <a class="el" href="_final___strada_8c_source.html#l00068">suministro_agua_task_handle</a>, <a class="el" href="_final___strada_8c_source.html#l00069">suministro_alimentos_task_handle</a>, <a class="el" href="switch_8h_source.html#l00032">SWITCH_1</a>, <a class="el" href="switch_8c_source.html#l00047">SwitchActivInt()</a>, <a class="el" href="timer__mcu_8h_source.html#l00040">timer_config_t::timer</a>, <a class="el" href="timer__mcu_8h_source.html#l00032">TIMER_A</a>, <a class="el" href="timer__mcu_8c_source.html#l00067">TimerInit()</a>, <a class="el" href="timer__mcu_8c_source.html#l00116">TimerStart()</a>, <a class="el" href="uart__mcu_8h_source.html#l00032">UART_PC</a> y <a class="el" href="uart__mcu_8c_source.html#l00107">UartInit()</a>.</p>
+
+</div>
+</div>
+<a id="afaccfed84cd1498a05ea04a65f1209b1" name="afaccfed84cd1498a05ea04a65f1209b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afaccfed84cd1498a05ea04a65f1209b1">&#9670;&#160;</a></span>FuncTimerA()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FuncTimerA </td>
+          <td>(</td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>param</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Notifica a la tarea de suministros de alimentos para que se encuentre lista. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">param</td><td>puntero tipo void </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="_final___strada_8c_source.html#l00146">146</a> del archivo <a class="el" href="_final___strada_8c_source.html">Final_Strada.c</a>.</p>
+
+<p class="reference">Hace referencia a <a class="el" href="_final___strada_8c_source.html#l00069">suministro_alimentos_task_handle</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_final___strada_8c_source.html#l00239">app_main()</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Documentación de variables</h2>
+<a id="acb02d93c1a9ca8c8849764aa3cdd7fd7" name="acb02d93c1a9ca8c8849764aa3cdd7fd7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb02d93c1a9ca8c8849764aa3cdd7fd7">&#9670;&#160;</a></span>balanza</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t balanza = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>variable que almacena el valor de la medición de la balanza analógica </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_final___strada_8c_source.html#l00088">88</a> del archivo <a class="el" href="_final___strada_8c_source.html">Final_Strada.c</a>.</p>
+
+</div>
+</div>
+<a id="a8025a9a26ceecd12ec13bf4108fd6dee" name="a8025a9a26ceecd12ec13bf4108fd6dee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8025a9a26ceecd12ec13bf4108fd6dee">&#9670;&#160;</a></span>capacidad_recipiente</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t capacidad_recipiente</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>variable que almacena la capacidad actual del recipiente </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_final___strada_8c_source.html#l00076">76</a> del archivo <a class="el" href="_final___strada_8c_source.html">Final_Strada.c</a>.</p>
+
+</div>
+</div>
+<a id="a9db0362c0a3fee6f4d05e7b02d7efa6a" name="a9db0362c0a3fee6f4d05e7b02d7efa6a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9db0362c0a3fee6f4d05e7b02d7efa6a">&#9670;&#160;</a></span>enviar_datos_uart_task_handle</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TaskHandle_t enviar_datos_uart_task_handle = <a class="el" href="ili9341_8c.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="_final___strada_8c_source.html#l00070">70</a> del archivo <a class="el" href="_final___strada_8c_source.html">Final_Strada.c</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_final___strada_8c_source.html#l00239">app_main()</a>.</p>
+
+</div>
+</div>
+<a id="ab5bb03dc93c3f059a5fcb4df13f69b4b" name="ab5bb03dc93c3f059a5fcb4df13f69b4b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5bb03dc93c3f059a5fcb4df13f69b4b">&#9670;&#160;</a></span>nivel_de_agua</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t nivel_de_agua</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>variable que almacena la distancia medida por el sensor de ultrasonido </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_final___strada_8c_source.html#l00082">82</a> del archivo <a class="el" href="_final___strada_8c_source.html">Final_Strada.c</a>.</p>
+
+</div>
+</div>
+<a id="aaa928c9a62449f7946da1e32f66c70d2" name="aaa928c9a62449f7946da1e32f66c70d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaa928c9a62449f7946da1e32f66c70d2">&#9670;&#160;</a></span>on</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool on = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>booleano que indica si el sistema está activo </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_final___strada_8c_source.html#l00100">100</a> del archivo <a class="el" href="_final___strada_8c_source.html">Final_Strada.c</a>.</p>
+
+</div>
+</div>
+<a id="a24d2a442459d88d5450264dbf05d595f" name="a24d2a442459d88d5450264dbf05d595f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24d2a442459d88d5450264dbf05d595f">&#9670;&#160;</a></span>peso</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t peso = 0</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>variable que almacena el valor del peso calculado a partir de balanza </p>
+
+<p class="definition">Definición en la línea <a class="el" href="_final___strada_8c_source.html#l00094">94</a> del archivo <a class="el" href="_final___strada_8c_source.html">Final_Strada.c</a>.</p>
+
+</div>
+</div>
+<a id="abdd8d12f2be3be139bcc39495ebfc222" name="abdd8d12f2be3be139bcc39495ebfc222"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abdd8d12f2be3be139bcc39495ebfc222">&#9670;&#160;</a></span>suministro_agua_task_handle</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TaskHandle_t suministro_agua_task_handle = <a class="el" href="ili9341_8c.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="_final___strada_8c_source.html#l00068">68</a> del archivo <a class="el" href="_final___strada_8c_source.html">Final_Strada.c</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_final___strada_8c_source.html#l00239">app_main()</a>.</p>
+
+</div>
+</div>
+<a id="a6093010d64df0029bcb670fd8af4a5a4" name="a6093010d64df0029bcb670fd8af4a5a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6093010d64df0029bcb670fd8af4a5a4">&#9670;&#160;</a></span>suministro_alimentos_task_handle</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">TaskHandle_t suministro_alimentos_task_handle = <a class="el" href="ili9341_8c.html#a070d2ce7b6bb7e5c05602aa8c308d0c4">NULL</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="_final___strada_8c_source.html#l00069">69</a> del archivo <a class="el" href="_final___strada_8c_source.html">Final_Strada.c</a>.</p>
+
+<p class="reference">Referenciado por <a class="el" href="_final___strada_8c_source.html#l00239">app_main()</a> y <a class="el" href="_final___strada_8c_source.html#l00146">FuncTimerA()</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_d9edf6c004b4a7ff14fe9ae7a92214ee.html">firmware</a></li><li class="navelem"><a class="el" href="dir_429d80758da54da73083af4edd40d0b3.html">projects</a></li><li class="navelem"><a class="el" href="dir_0df2d5e7cb9fb89ea4706ef9d24cc54d.html">Final_Strada</a></li><li class="navelem"><a class="el" href="dir_8778694b715f67459e4671abab94b55f.html">main</a></li><li class="navelem"><a class="el" href="_final___strada_8c.html">Final_Strada.c</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.11.0 </li>
+  </ul>
+</div>
+</body>
+</html>
